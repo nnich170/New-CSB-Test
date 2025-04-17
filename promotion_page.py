@@ -2,11 +2,14 @@ import tkinter as tk
 from tkinter import filedialog
 from PIL import Image, ImageTk
 
+#Go back to home_page when user clicked on HOME (THIS SECTION IS ERROR CODE) 
 def open_home_page():
     from start_page import home_page
     home_page()
 
-promotion_items = []
+promotion_items = [] #This list is used to store the filename of the image, title of promotion, end_date, start_date and description
+
+#code for promotion opage
 def promotion_page():
     global promotion
     promotion = tk.Tk()
@@ -22,7 +25,7 @@ def promotion_page():
 
     #image for coffee corner logo
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png")
+        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png") #imagepath: cornerlogo
         photo = ImageTk.PhotoImage(image.resize((79, 79)))
 
         label_image = tk.Label(logo_frame_1, image=photo, bg="#878378")
@@ -48,7 +51,7 @@ def promotion_page():
 
     #image for account (top-right corner)
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com.png")
+        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com.png") #imagepath: profilelogo
         photo = ImageTk.PhotoImage(image.resize((40, 60)))
 
         label_image = tk.Label(logo_frame_2, image=photo, bg="#878378")
@@ -61,10 +64,12 @@ def promotion_page():
     tk.Label(promotion, text='"Hot News"', font=("Times New Roman", 20, "bold"), fg="black", bg="#D9D9D9").pack(pady=(10, 0))
     tk.Label(promotion, text='____________________', font=("Times New Roman", 12, "bold"), fg="black", bg="#D9D9D9").pack()
 
+    #add promotion button
     add_promo_btn = tk.Button(promotion, text="Add Promotion", font=("Times New Roman", 12, "bold"), fg="black", bg="#878378", command=promo_info_box)
     add_promo_btn.pack(pady=10)
 
 
+    #brown frame at the end 
     down_frame = tk.Frame(promotion, width=430, height=100, bg="#878378",relief="ridge", bd=2)
     down_frame.pack(fill="both",side="bottom")
     down_label = tk.Label(down_frame, text="Connect with us on \n Facebook: Coffee Corner \nTel: (+855)77 481 111 \nLocation: Phnom Penh, Cambodia.",
@@ -74,16 +79,17 @@ def promotion_page():
     promotion.mainloop()
 
 
-def getfile():
+def getfile(): #function for asking user to choose a file from their device 
     global filepath
     filepath = filedialog.askopenfilename(title="Select an image File",
                                       filetypes=[("Image Files", "*.png *.jpg *.jpeg *.bmp *.gif"), ("All Files", "*.*")])
+    #filepath will be added into the entry box 
     if filepath:
         filename_entry.delete(0, tk.END)
         filename_entry.insert(0, filepath)
-        # print(filepath)
 
 
+#Page for details on promotion, after users click on the Add promotion
 def promo_info_box():
     global root1
     global filename_entry
@@ -131,7 +137,7 @@ def promo_info_box():
 
     root1.mainloop()
 
-
+#function to save  user input 
 def save_promo_info():
     global filepath
     title = title_entry.get()
@@ -143,12 +149,11 @@ def save_promo_info():
         print(promotion_items)
         filepath = None  # Reset filepath for the next addition
         root1.destroy()
-
         update_promo_page()
     else:
         tk.messagebox.showerror("Error", "Please fill all the information.")
 
-
+#Output the promotion they have added
 def update_promo_page():
     global promotion2
     promotion2 = tk.Toplevel()
@@ -165,7 +170,7 @@ def update_promo_page():
 
     #image for coffee corner logo
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png")
+        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png") #imagepath: cornerlogo
         photo = ImageTk.PhotoImage(image.resize((79, 79)))
 
         label_image = tk.Label(logo_frame_1, image=photo, bg="#878378")
@@ -191,7 +196,7 @@ def update_promo_page():
 
     #image for account (top-right corner)
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com.png")
+        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com.png")#imagepath: profilelogo
         photo = ImageTk.PhotoImage(image.resize((40, 60)))
 
         label_image = tk.Label(logo_frame_2, image=photo, bg="#878378")
@@ -208,7 +213,7 @@ def update_promo_page():
     add_promo_btn.pack(pady=10)
 
     for item in promotion_items:
-        create_promo_display(promotion2, item)
+        create_promo_display(promotion2, item) 
 
     down_frame = tk.Frame(promotion2, width=430, height=100, bg="#878378",relief="ridge", bd=2)
     down_frame.pack(fill="both",side="bottom")
@@ -217,7 +222,7 @@ def update_promo_page():
     down_label.pack()
 
     promotion2.mainloop()
-
+ #Function to extract the promotion_items list and show the element at the neccessary location
 def create_promo_display(parent, promo_item):
     image_frame = tk.Frame(parent, width=150, height=200, bg="#D9D9D9")
     image_frame.pack(pady=10)
@@ -239,6 +244,7 @@ def create_promo_display(parent, promo_item):
     except FileNotFoundError:
         tk.Label(image_frame, text="Image not found!", fg="black", bg="pink", font=("Arial", 12)).pack()
 
+#After added every details needed, users can display the info they have added in the description_page
 def description_page(promo_data):
     description_window = tk.Toplevel()
     description_window.geometry("430x932")
@@ -279,7 +285,7 @@ def description_page(promo_data):
 
     #image for account (top-right corner)
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com.png")
+        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com.png") #imagepath: cornerlogo
         photo = ImageTk.PhotoImage(image.resize((40, 60)))
 
         label_image = tk.Label(logo_frame_2, image=photo, bg="#878378")
@@ -289,7 +295,7 @@ def description_page(promo_data):
     except FileNotFoundError:
         tk.Label(logo_frame_2, text="Image not found!", fg="black",bg="#D9D9D9", font=("Arial", 12)).pack()
 
-    back_btn_frame = tk.Frame(description_window, width=430, height=30, bg="#D9D9D9")
+    back_btn_frame = tk.Frame(description_window, width=430, height=30, bg="#D9D9D9") #button use for going back to the promotion page
     back_btn_frame.pack(anchor="w", padx=10, pady=10)
     back_btn = tk.Button(back_btn_frame, text="Back", font=("Times New Roman", 12), bg="#878378", fg="black", command=description_window.destroy)
     back_btn.pack(side="left")
@@ -309,10 +315,7 @@ def description_page(promo_data):
     except FileNotFoundError:
         tk.Label(promo_image_frame, text="Image not found!", fg="black", bg="pink", font=("Arial", 12)).pack()
 
-    # tk.Label(description_window, text="Description", font=("Times New Roman", 14, "bold"), fg="black", bg="#D9D9D9", anchor="w").pack(fill="x", padx=20, pady=(10, 0))
-    # tk.Label(description_window, text=promo_data["title"], font=("Times New Roman", 14), fg="black", bg="white", relief="solid", anchor="w").pack(fill="x", padx=20, pady=(0, 10))
-
-    # tk.Label(description_window, text="Description:", font=("Times New Roman", 14, "bold"), fg="black", bg="#D9D9D9", anchor="w").pack(fill="x", padx=20, pady=(10, 0))
+    #for description box
     description_box = tk.Text(description_window, font=("Times New Roman", 12), bg="white", fg="black", height=10, width=200, relief="solid")
     tk.Label(description_box, text="Promotion Description:", font=("Times New Roman", 14, "bold"), fg="black", bg="#D9D9D9").pack(fill="x", padx=20, pady=(10, 0))
     tk.Label(description_box, text=f"Title: {promo_data["title"]}", font=("Times New Roman", 14), fg="black", bg="white", anchor="w").pack(fill="x", padx=20, pady=(5, 0))
