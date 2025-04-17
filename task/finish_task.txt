@@ -1,0 +1,6 @@
+landing page 
+admin login and signup
+home page
+add promotion page
+user fill in details box
+description page
