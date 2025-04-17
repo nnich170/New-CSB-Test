@@ -21,9 +21,9 @@ def first_page(): #function to run
     image_frame = tk.Frame(root, width=229, height=229, bg="#878378")
     image_frame.pack(pady=30)
 
-    #Using try-exception handling to check if the image availale or not
+    #Using try-exception handling to check if the image availale or not 
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png")
+        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png") #image path: cornerlogo
         photo = ImageTk.PhotoImage(image.resize((229, 229)))
 
         label_image = tk.Label(image_frame, image=photo, bg="#878378")
@@ -72,7 +72,7 @@ def sign_up():
 
     #Using try-exception handling to check if the image availale or not
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png")
+        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png") #image path: cornerlogo
         photo = ImageTk.PhotoImage(image.resize((229, 229)))
 
         label_image = tk.Label(image_frame, image=photo, bg="#878378")
@@ -146,7 +146,7 @@ def login():
 
     #Using try-exception handling to check if the image availale or not
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png")
+        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png") #image path: cornerlogo
         photo = ImageTk.PhotoImage(image.resize((229, 229)))
 
         label_image = tk.Label(image_frame, image=photo, bg="#878378")
@@ -229,7 +229,7 @@ def home_page():
 
     #image for coffee corner logo
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png")
+        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png") #image path: cornerlogo
         photo = ImageTk.PhotoImage(image.resize((79, 79)))
 
         label_image = tk.Label(logo_frame_1, image=photo, bg="#878378")
@@ -255,7 +255,7 @@ def home_page():
 
     #image for account (top-right corner)
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com.png")
+        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com.png") #image path: profilelogo
         photo = ImageTk.PhotoImage(image.resize((40, 60)))
 
         label_image = tk.Label(logo_frame_2, image=photo, bg="#878378")
@@ -269,7 +269,7 @@ def home_page():
     image_frame = tk.Frame(home, width=300, height=200, bg="white" )
     image_frame.pack(pady=(20, 5))
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image copy.png")
+        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image copy.png")#image path: coffeecorner
         photo = ImageTk.PhotoImage(image.resize((300, 200)))
 
         label_image = tk.Label(image_frame, image=photo, bg="#878378")
@@ -297,7 +297,7 @@ def home_page():
 
     #cup of coffee image
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com-2.png")
+        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com-2.png")#image path:coffeeimage
         photo = ImageTk.PhotoImage(image.resize((60, 60)))
 
         label_image = tk.Label(image1_frame, image=photo, bg="#D9D9D9")
@@ -315,7 +315,7 @@ def home_page():
     image2_frame.pack(side="left", padx=(0, 50))
 
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com-5.png")
+        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com-5.png")#image path: thumb
         photo = ImageTk.PhotoImage(image.resize((60, 60)))
 
         label_image = tk.Label(image2_frame, image=photo, bg="#D9D9D9")
@@ -332,7 +332,7 @@ def home_page():
     image3_frame = tk.Frame(small_logo_frame, width=60, height=60, bg="#D9D9D9")
     image3_frame.pack(side="left", padx=(10, 50))
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com-4.png")
+        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com-4.png")#image path: wallet
         photo = ImageTk.PhotoImage(image.resize((60, 60)))
 
         label_image = tk.Label(image3_frame, image=photo, bg="#D9D9D9")
@@ -357,16 +357,18 @@ def home_page():
 
     home.mainloop()
 
+#open_homepage from sign_up page (when users click on Register)
 def open_homepage1():
     window1.destroy()
     home_page()
 
+#open_homepage from log in page (when users click on Log In)
 def open_homepage2():
     window2.destroy()
     home_page()
-
+#open the promotion page when user click on promotion button (THIS SECTION IS ERROR)
 def open_promotion_page():
-    promotion_page = "/Users/kanithasem/python test/.venv/final_project/promotion_page.py"
+    promotion_page = "/Users/kanithasem/python test/.venv/final_project/promotion_page.py" #path to promotion_page.py
     subprocess.run(["python3", promotion_page])
 
 
