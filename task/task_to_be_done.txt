@@ -1,0 +1,5 @@
+database
+connect client and admin side 
+admin side task
+
+Account page for admin
