@@ -4,3 +4,11 @@ home page
 add promotion page
 user fill in details box
 description page
+
+
+
+class contents that have been used: 
+Array (list)
+file-handling
+try-except
+import libraries 
