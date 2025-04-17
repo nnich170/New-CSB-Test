@@ -366,7 +366,7 @@ def open_homepage1():
 def open_homepage2():
     window2.destroy()
     home_page()
-#open the promotion page when user click on promotion button (THIS SECTION IS ERROR)
+#open the promotion page when user click on promotion button
 def open_promotion_page():
     promotion_page = "/Users/kanithasem/python test/.venv/final_project/promotion_page.py" #path to promotion_page.py
     subprocess.run(["python3", promotion_page])
