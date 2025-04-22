@@ -1,5 +1,20 @@
-database
-connect client and admin side 
-admin side task
+-database: 
+Username and password for validation
+Info for customer booking (booking list)
 
+-Try and except: 
+need full details of registration info (if not show a messagebox saying you need to fill in the info)
+
+-Admin side: 
+fetch the data of booking list and display it in booking page
+allow the users to use the checkbox to remove those who already picked up their gift
 Account page for admin
+
+-Client side: 
+booking page for users 
+connect with database (info of booking) 
+Account page for users 
+
+
+
+SEE FIGMA FOR DESIGN DETAILS 
