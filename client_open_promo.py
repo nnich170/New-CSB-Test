@@ -1,0 +1,2 @@
+from client_promotion import update_promo_page
+update_promo_page()
