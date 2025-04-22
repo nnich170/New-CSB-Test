@@ -1,15 +1,14 @@
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk
+import sqlite3
 
-#Go back to home_page when user clicked on HOME (THIS SECTION IS ERROR CODE) 
 def open_home_page():
     from start_page import home_page
     home_page()
 
-promotion_items = [] #This list is used to store the filename of the image, title of promotion, end_date, start_date and description
+promotion_items = []
 
-#code for promotion opage
 def promotion_page():
     global promotion
     promotion = tk.Tk()
@@ -25,7 +24,7 @@ def promotion_page():
 
     #image for coffee corner logo
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png") #imagepath: cornerlogo
+        image = Image.open("/Users/kanithasem/python test/.vscode/final_project/image/cornerlogo.png")
         photo = ImageTk.PhotoImage(image.resize((79, 79)))
 
         label_image = tk.Label(logo_frame_1, image=photo, bg="#878378")
@@ -51,7 +50,7 @@ def promotion_page():
 
     #image for account (top-right corner)
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com.png") #imagepath: profilelogo
+        image = Image.open("/Users/kanithasem/python test/.vscode/final_project/image/profilelogo.png")
         photo = ImageTk.PhotoImage(image.resize((40, 60)))
 
         label_image = tk.Label(logo_frame_2, image=photo, bg="#878378")
@@ -64,12 +63,10 @@ def promotion_page():
     tk.Label(promotion, text='"Hot News"', font=("Times New Roman", 20, "bold"), fg="black", bg="#D9D9D9").pack(pady=(10, 0))
     tk.Label(promotion, text='____________________', font=("Times New Roman", 12, "bold"), fg="black", bg="#D9D9D9").pack()
 
-    #add promotion button
     add_promo_btn = tk.Button(promotion, text="Add Promotion", font=("Times New Roman", 12, "bold"), fg="black", bg="#878378", command=promo_info_box)
     add_promo_btn.pack(pady=10)
 
 
-    #brown frame at the end 
     down_frame = tk.Frame(promotion, width=430, height=100, bg="#878378",relief="ridge", bd=2)
     down_frame.pack(fill="both",side="bottom")
     down_label = tk.Label(down_frame, text="Connect with us on \n Facebook: Coffee Corner \nTel: (+855)77 481 111 \nLocation: Phnom Penh, Cambodia.",
@@ -79,26 +76,19 @@ def promotion_page():
     promotion.mainloop()
 
 
-def getfile(): #function for asking user to choose a file from their device 
+def getfile():
     global filepath
     filepath = filedialog.askopenfilename(title="Select an image File",
                                       filetypes=[("Image Files", "*.png *.jpg *.jpeg *.bmp *.gif"), ("All Files", "*.*")])
-    #filepath will be added into the entry box 
     if filepath:
         filename_entry.delete(0, tk.END)
         filename_entry.insert(0, filepath)
 
 
-#Page for details on promotion, after users click on the Add promotion
 def promo_info_box():
-    global root1
-    global filename_entry
-    global title_entry
-    global description_text
-    global start_date_entry
-    global end_date_entry
+    global root1, filename_entry, title_entry, description_text, start_date_entry, end_date_entry, amount_entry
     root1 = tk.Toplevel()
-    root1.geometry("400x500")
+    root1.geometry("400x600")
     root1.title("Infobox")
     root1.configure(bg="#D9D9D9")
 
@@ -126,6 +116,12 @@ def promo_info_box():
     end_date_entry = tk.Entry(root1, font=("Times New Roman", 12), bg="#878378", fg="black")
     end_date_entry.pack(fill="x", pady=5, padx=10)
 
+    label_amount = tk.Label(root1, text="Amount", font=("Times New Roman", 12, "bold"), bg="#D9D9D9", fg="black", anchor="w")
+    label_amount.pack(fill="x", padx=10)
+    amount_entry = tk.Entry(root1, font=("Times New Roman", 12), bg="#878378", fg="black")
+    amount_entry.pack(fill="x", pady=5, padx=10)
+
+
     label_description = tk.Label(root1, text="Description", font=("Times New Roman", 12, "bold"), bg="#D9D9D9", fg="black", anchor="w")
     label_description.pack(fill="x", padx=10)
     description_text = tk.Text(root1, width=50, height=10, font=("Times New Roman", 12), bg="#878378", fg="black")
@@ -137,23 +133,52 @@ def promo_info_box():
 
     root1.mainloop()
 
-#function to save  user input 
+
 def save_promo_info():
     global filepath
     title = title_entry.get()
-    description = description_text.get("1.0", "end")
+    description = description_text.get("1.0", "end").strip()  # Get text and remove leading/trailing whitespace
     startdate = start_date_entry.get()
     enddate = end_date_entry.get()
+    amount = amount_entry.get()
+
     if filepath and title and description:
-        promotion_items.append({"image": filepath, "title": title, "description": description, "start_date": startdate, "end_date": enddate})
-        print(promotion_items)
+        # Save to the database
+        conn = sqlite3.connect("/Users/kanithasem/python test/.vscode/final_project/cornercoffee.db")
+        cursor = conn.cursor()
+        cursor.execute('''
+                CREATE TABLE IF NOT EXISTS promotions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                image_path TEXT NOT NULL,
+                title TEXT NOT NULL,
+                description TEXT NOT NULL,
+                start_date TEXT,
+                end_date TEXT,
+                amount INTEGER
+                       
+            )''')
+
+        try:
+            cursor.execute(
+                "INSERT INTO promotions (image_path, title, description, start_date, end_date, amount) VALUES (?, ?, ?, ?, ?, ?)",
+                (filepath, title, description, startdate, enddate, amount)
+            )
+            conn.commit()
+            tk.messagebox.showinfo("Success", "Promotion information saved!")
+        except sqlite3.Error as e:
+            conn.rollback()
+            tk.messagebox.showerror("Database Error", f"Error saving to database: {e}")
+        finally:
+            conn.close()
+
+        promotion_items.append({"image": filepath, "title": title, "description": description, "start_date": startdate, "end_date": enddate, "amount": amount})
         filepath = None  # Reset filepath for the next addition
         root1.destroy()
         update_promo_page()
     else:
         tk.messagebox.showerror("Error", "Please fill all the information.")
 
-#Output the promotion they have added
+
 def update_promo_page():
     global promotion2
     promotion2 = tk.Toplevel()
@@ -170,7 +195,7 @@ def update_promo_page():
 
     #image for coffee corner logo
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png") #imagepath: cornerlogo
+        image = Image.open("/Users/kanithasem/python test/.vscode/final_project/image/cornerlogo.png")
         photo = ImageTk.PhotoImage(image.resize((79, 79)))
 
         label_image = tk.Label(logo_frame_1, image=photo, bg="#878378")
@@ -196,7 +221,7 @@ def update_promo_page():
 
     #image for account (top-right corner)
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com.png")#imagepath: profilelogo
+        image = Image.open("/Users/kanithasem/python test/.vscode/final_project/image/profilelogo.png")
         photo = ImageTk.PhotoImage(image.resize((40, 60)))
 
         label_image = tk.Label(logo_frame_2, image=photo, bg="#878378")
@@ -213,7 +238,7 @@ def update_promo_page():
     add_promo_btn.pack(pady=10)
 
     for item in promotion_items:
-        create_promo_display(promotion2, item) 
+        create_promo_display(promotion2, item)
 
     down_frame = tk.Frame(promotion2, width=430, height=100, bg="#878378",relief="ridge", bd=2)
     down_frame.pack(fill="both",side="bottom")
@@ -222,7 +247,7 @@ def update_promo_page():
     down_label.pack()
 
     promotion2.mainloop()
- #Function to extract the promotion_items list and show the element at the neccessary location
+
 def create_promo_display(parent, promo_item):
     image_frame = tk.Frame(parent, width=150, height=200, bg="#D9D9D9")
     image_frame.pack(pady=10)
@@ -244,7 +269,6 @@ def create_promo_display(parent, promo_item):
     except FileNotFoundError:
         tk.Label(image_frame, text="Image not found!", fg="black", bg="pink", font=("Arial", 12)).pack()
 
-#After added every details needed, users can display the info they have added in the description_page
 def description_page(promo_data):
     description_window = tk.Toplevel()
     description_window.geometry("430x932")
@@ -259,7 +283,7 @@ def description_page(promo_data):
 
     #image for coffee corner logo
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png")
+        image = Image.open("/Users/kanithasem/python test/.vscode/final_project/image/cornerlogo.png")
         photo = ImageTk.PhotoImage(image.resize((79, 79)))
 
         label_image = tk.Label(logo_frame_1, image=photo, bg="#878378")
@@ -285,7 +309,7 @@ def description_page(promo_data):
 
     #image for account (top-right corner)
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com.png") #imagepath: cornerlogo
+        image = Image.open("/Users/kanithasem/python test/.vscode/final_project/image/profilelogo.png")
         photo = ImageTk.PhotoImage(image.resize((40, 60)))
 
         label_image = tk.Label(logo_frame_2, image=photo, bg="#878378")
@@ -295,7 +319,7 @@ def description_page(promo_data):
     except FileNotFoundError:
         tk.Label(logo_frame_2, text="Image not found!", fg="black",bg="#D9D9D9", font=("Arial", 12)).pack()
 
-    back_btn_frame = tk.Frame(description_window, width=430, height=30, bg="#D9D9D9") #button use for going back to the promotion page
+    back_btn_frame = tk.Frame(description_window, width=430, height=30, bg="#D9D9D9")
     back_btn_frame.pack(anchor="w", padx=10, pady=10)
     back_btn = tk.Button(back_btn_frame, text="Back", font=("Times New Roman", 12), bg="#878378", fg="black", command=description_window.destroy)
     back_btn.pack(side="left")
@@ -315,16 +339,22 @@ def description_page(promo_data):
     except FileNotFoundError:
         tk.Label(promo_image_frame, text="Image not found!", fg="black", bg="pink", font=("Arial", 12)).pack()
 
-    #for description box
     description_box = tk.Text(description_window, font=("Times New Roman", 12), bg="white", fg="black", height=10, width=200, relief="solid")
-    tk.Label(description_box, text="Promotion Description:", font=("Times New Roman", 14, "bold"), fg="black", bg="#D9D9D9").pack(fill="x", padx=20, pady=(10, 0))
-    tk.Label(description_box, text=f"Title: {promo_data["title"]}", font=("Times New Roman", 14), fg="black", bg="white", anchor="w").pack(fill="x", padx=20, pady=(5, 0))
-    tk.Label(description_box, text=f"Start Date: {promo_data["start_date"]}", font=("Times New Roman", 14), fg="black", bg="white", anchor="w").pack(fill="x", padx=20, pady=(5, 0))
-    tk.Label(description_box, text=f"End Date: {promo_data["end_date"]}", font=("Times New Roman", 14), fg="black", bg="white", anchor="w").pack(fill="x", padx=20, pady=(5, 0))
-    tk.Label(description_box, text=f"Details: {promo_data["description"]}", font=("Times New Roman", 14), fg="black", bg="white", anchor="w").pack(fill="x", padx=20, pady=(5, 0))
+    description_box.insert(tk.END, f"Title: {promo_data['title']}\n")
+    description_box.insert(tk.END, f"Start Date: {promo_data['start_date']}\n")
+    description_box.insert(tk.END, f"End Date: {promo_data['end_date']}\n")
+    description_box.insert(tk.END, f"Amount: {promo_data['amount']}\n")
+    description_box.insert(tk.END, f"Details: {promo_data['description']}")
     description_box.config(state=tk.DISABLED) # Make it read-only
     description_box.pack(fill="x", padx=20, pady=(0, 10))
 
+    down_frame = tk.Frame(description_window, width=430, height=100, bg="#878378",relief="ridge", bd=2)
+    down_frame.pack(fill="both",side="bottom")
+    down_label = tk.Label(down_frame, text="Connect with us on \n Facebook: Coffee Corner \nTel: (+855)77 481 111 \nLocation: Phnom Penh, Cambodia.",
+                        font=("Times New Roman", 12), fg="black", bg="#878378")
+    down_label.pack()
+
     description_window.mainloop()
 
-promotion_page()
+# promotion_page() #function to run 
+
