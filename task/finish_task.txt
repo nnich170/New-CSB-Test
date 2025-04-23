@@ -10,13 +10,13 @@ description page (kanitha)
 Sign up and login page (kanitha)
 Promotion page (kanitha)
 Booking page (kanitha)
-
-
+Filling info for customers (kanitha)
+Connect users info to databse (kanitha)
 
 
 class contents that have been used: 
 Array (list)
 file-handling
 try-except
-import libraries 
+import libraries (tkinter, time, PIL)
 Connect with database (SQL) 
