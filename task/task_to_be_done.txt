@@ -11,8 +11,6 @@ allow the users to use the checkbox to remove those who already picked up their 
 Account page for admin
 
 -Client side: 
-booking page for users 
-connect with database (info of booking) 
 Account page for users 
 
 
