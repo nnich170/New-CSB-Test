@@ -392,7 +392,7 @@ def create_admin_info_table():
     """
     conn = None
     try:
-        conn = sqlite3.connect(r"D:\\New-CSB-Test\\cornercoffee.db")
+        conn = sqlite3.connect("cornercoffee.db")
         cursor = conn.cursor()
 
         cursor.execute("""
@@ -449,7 +449,7 @@ def register_admin(full_name, username, phone_number, password, confirm_password
         return False
 
     try:
-        conn = sqlite3.connect(r"D:\\New-CSB-Test\\cornercoffee.db")
+        conn = sqlite3.connect("cornercoffee.db")
         cursor = conn.cursor()
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
@@ -512,7 +512,7 @@ def validate_login(username, password):
     conn = None
     try:
         print(f"Attempting to validate login for username: {username}")
-        conn = sqlite3.connect(r"D:\\New-CSB-Test\\cornercoffee.db")
+        conn = sqlite3.connect("cornercoffee.db")
         cursor = conn.cursor()
 
         # Check if the username exists
