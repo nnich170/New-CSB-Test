@@ -1,6 +1,9 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 import subprocess
+import sqlite3
+import hashlib
+from tkinter import messagebox
 
 
 def first_page(): #function to run
@@ -114,8 +117,13 @@ def sign_up():
     password_confirm_entry.pack(fill="x", pady=(2, 10))
 
     #register button
-    reg_btn = tk.Button(sign_up_frame, text="Register", font=("Times New Roman", 12, "bold"), fg="black", bg="#878378", command=open_homepage1)
+    reg_btn = tk.Button(sign_up_frame, text="Register", font=("Times New Roman", 12, "bold"), fg="black", bg="#878378", 
+                        command=lambda: handle_registration_and_open_homepage(full_name_entry, user_name_entry, phone_entry, password_entry, password_confirm_entry))
     reg_btn.pack(pady=(0, 5))
+    def handle_registration_and_open_homepage(full_name_entry, user_name_entry, phone_entry, password_entry, password_confirm_entry):   #function to handle registration and open homepage
+        handle_registration(full_name_entry, user_name_entry, phone_entry, password_entry, password_confirm_entry)
+        open_homepage1()
+    
 
     #frame for the last sentence ("Already have an account")
     down_frame = tk.Frame(window1, bg="#D9D9D9")
@@ -177,8 +185,12 @@ def login():
     password_entry = tk.Entry(login_frame, font=("Times New Roman", 12), bg="#878378", relief="solid")
     password_entry.pack(fill="x", pady=(2, 20))
 
-    login_btn = tk.Button(login_frame, text="Log In", font=("Times New Roman", 12, "bold"), fg="black", bg="#878378", command=open_homepage2)
+     login_btn = tk.Button(login_frame, text="Log In", font=("Times New Roman", 12, "bold"), fg="black", bg="#878378", 
+                          command=lambda: handle_login_and_open_homepage(user_name_entry, password_entry))
     login_btn.pack(pady=(0, 5))
+    def handle_login_and_open_homepage(user_name_entry, password_entry):  #function to handle login and open homepage
+        if handle_login(user_name_entry, password_entry):
+            open_homepage2() 
 
 
     #frame for the last sentence ("Create an Account")
@@ -370,6 +382,172 @@ def open_homepage2():
 def open_promotion_page():
     promotion_page = "/Users/kanithasem/python test/.venv/final_project/promotion_page.py" #path to promotion_page.py
     subprocess.run(["python3", promotion_page])
+
+
+#Create admin info
+def create_admin_info_table():
+    """
+    Creates the 'admin_info' table in the database if it doesn't exist.
+    The table stores admin full names, usernames, phone numbers, and passwords (hashed).
+    """
+    conn = None
+    try:
+        conn = sqlite3.connect(r"D:\\New-CSB-Test\\cornercoffee.db")
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS admin_info (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                full_name TEXT NOT NULL,
+                username TEXT NOT NULL UNIQUE,
+                phone_number TEXT NOT NULL,
+                password TEXT NOT NULL
+            )
+        """)
+        conn.commit()
+        print("Admin info table created successfully (if it didn't exist).")
+    except sqlite3.Error as e:
+        print(f"Error creating table: {e}")
+        # Consider logging the error or re-raising it for the calling function to handle
+        if messagebox:  # Check if messagebox is available (it might not be in a pure backend context)
+            messagebox.showerror("Database Error", f"Failed to create admin_info table: {e}")
+    finally:
+        if conn:
+            conn.close()
+def handle_registration(full_name_entry, user_name_entry, phone_entry, password_entry, password_confirm_entry):
+    full_name = full_name_entry.get()
+    user_name = user_name_entry.get()
+    phone_number = phone_entry.get()
+    password = password_entry.get()
+    password_confirm = password_confirm_entry.get() 
+ # Call the register_admin function to handle the registration process
+    register_admin(full_name, user_name, phone_number, password, password_confirm)
+
+def register_admin(full_name, username, phone_number, password, confirm_password):
+    """
+    Registers a new admin user in the database.
+
+    Args:
+        full_name (str): The full name of the admin.
+        username (str): The username of the admin.
+        phone_number (str): The phone number of the admin.
+        password (str): The password of the admin (will be hashed).
+    Returns:
+        bool: True if registration is successful, False otherwise.
+    """
+    conn = None
+    if not all([full_name, username, phone_number, password, confirm_password]):
+        print("Registration Error: Please fill in all the information.")
+        if messagebox:
+            messagebox.showerror("Registration Error", "Please fill in all the information.")
+        return False
+
+    if password != confirm_password:
+        print("Registration Error: Passwords do not match.")
+        if messagebox:
+            messagebox.showerror("Registration Error", "Passwords do not match.")
+        return False
+
+    try:
+        conn = sqlite3.connect(r"D:\\New-CSB-Test\\cornercoffee.db")
+        cursor = conn.cursor()
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+
+        # Check if the username already exists.
+        cursor.execute("SELECT username FROM admin_info WHERE username = ?", (username,))
+        existing_user = cursor.fetchone()
+        if existing_user:
+            print("Registration Error: Username already exists.")
+            if messagebox:
+                messagebox.showerror("Registration Error", "Username already exists. Please choose a different username.")
+            return False
+
+        cursor.execute("""
+            INSERT INTO admin_info (full_name, username, phone_number, password)
+            VALUES (?, ?, ?, ?)
+        """, (full_name, username, phone_number, hashed_password))
+        conn.commit()
+        print("Admin registered successfully.")
+        if messagebox:
+            messagebox.showinfo("Registration Successful", "Admin registered successfully.")
+        return True
+    except sqlite3.IntegrityError:
+        print("Registration Error: Username already exists.")
+        if messagebox:
+            messagebox.showerror("Registration Error", "Username already exists. Please choose a different username.")
+        return False
+    except sqlite3.Error as e:
+        print(f"Error registering admin: {e}")
+        if messagebox:
+            messagebox.showerror("Database Error", f"Failed to register admin: {e}")
+        return False
+    finally:
+        if conn:
+            conn.close()
+
+def handle_login(user_name_entry, password_entry):
+    username = user_name_entry.get()
+    password = password_entry.get()
+
+    if not username or not password:
+        print("Login Error: Please fill in all the information.")
+        if messagebox:
+            messagebox.showerror("Login Error", "Please fill in all the information.")
+        return False
+
+    # Call the validate_login function to check the credentials
+    return validate_login(username, password)
+    
+def validate_login(username, password):
+    """
+    Validates the admin's username and password against the database.
+
+    Args:
+        username (str): The username entered by the admin.
+        password (str): The password entered by the admin.
+
+    Returns:
+        bool: True if the credentials are valid, False otherwise.
+    """
+    conn = None
+    try:
+        print(f"Attempting to validate login for username: {username}")
+        conn = sqlite3.connect(r"D:\\New-CSB-Test\\cornercoffee.db")
+        cursor = conn.cursor()
+
+        # Check if the username exists
+        cursor.execute("SELECT password FROM admin_info WHERE username = ?", (username,))
+        stored_hashed_password = cursor.fetchone()
+
+        if stored_hashed_password:
+            print("Username found. Validating password...")
+            entered_hashed_password = hashlib.sha256(password.encode()).hexdigest()
+            if entered_hashed_password == stored_hashed_password[0]:
+                print("Login successful.")
+                if messagebox:
+                    messagebox.showinfo("Login Successful", "Login successful.")
+                return True
+            else:
+                print("Invalid password.")
+                if messagebox:
+                    messagebox.showerror("Login Error", "Invalid password.")
+                return False
+        else:
+            print("Username not found.")
+            if messagebox:
+                messagebox.showerror("Login Error", "Username not found. Please register.")
+            return False
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        if messagebox:
+            messagebox.showerror("Database Error", f"Failed to validate login: {e}")
+        return False
+    finally:
+        if conn:
+            conn.close()
+
+if __name__ == "__main__":
+    create_admin_info_table()
 
 
 
