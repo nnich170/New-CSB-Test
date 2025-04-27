@@ -26,7 +26,7 @@ def first_page(): #function to run
 
     #Using try-exception handling to check if the image availale or not 
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png") #image path: cornerlogo
+        image = Image.open(r"D:\\New-CSB-Test\\image\\cornerlogo.png") #image path: cornerlogo
         photo = ImageTk.PhotoImage(image.resize((229, 229)))
 
         label_image = tk.Label(image_frame, image=photo, bg="#878378")
@@ -64,7 +64,7 @@ def sign_up():
 
     # top brown frame
 
-    upper_frame = tk.Frame(window1, width=430, height=80, bg="#878378")
+    upper_frame = tk.Frame(window1, width=430, height=10, bg="#878378")
     upper_frame.pack(side="top")
 
     # "COFEE CORNER TITLE" (pady use for gap between each row (y-axis), padx use for gap between each column (x-axis))
@@ -75,7 +75,7 @@ def sign_up():
 
     #Using try-exception handling to check if the image availale or not
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png") #image path: cornerlogo
+        image = Image.open(r"D:\\New-CSB-Test\\image\\cornerlogo.png") #image path: cornerlogo
         photo = ImageTk.PhotoImage(image.resize((229, 229)))
 
         label_image = tk.Label(image_frame, image=photo, bg="#878378")
@@ -123,8 +123,6 @@ def sign_up():
     def handle_registration_and_open_homepage(full_name_entry, user_name_entry, phone_entry, password_entry, password_confirm_entry):   #function to handle registration and open homepage
         handle_registration(full_name_entry, user_name_entry, phone_entry, password_entry, password_confirm_entry)
         open_homepage1()
-    
-
     #frame for the last sentence ("Already have an account")
     down_frame = tk.Frame(window1, bg="#D9D9D9")
     down_frame.pack()
@@ -143,7 +141,7 @@ def login():
 
     # top brown frame
 
-    upper_frame = tk.Frame(window2, width=430, height=80, bg="#878378")
+    upper_frame = tk.Frame(window2, width=430, height=10, bg="#878378")
     upper_frame.pack(side="top")
 
     # "COFEE CORNER TITLE" (pady use for gap between each row (y-axis), padx use for gap between each column (x-axis))
@@ -154,7 +152,7 @@ def login():
 
     #Using try-exception handling to check if the image availale or not
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png") #image path: cornerlogo
+        image = Image.open(r"D:\\New-CSB-Test\\image\\cornerlogo.png") #image path: cornerlogo
         photo = ImageTk.PhotoImage(image.resize((229, 229)))
 
         label_image = tk.Label(image_frame, image=photo, bg="#878378")
@@ -185,7 +183,7 @@ def login():
     password_entry = tk.Entry(login_frame, font=("Times New Roman", 12), bg="#878378", relief="solid")
     password_entry.pack(fill="x", pady=(2, 20))
 
-     login_btn = tk.Button(login_frame, text="Log In", font=("Times New Roman", 12, "bold"), fg="black", bg="#878378", 
+    login_btn = tk.Button(login_frame, text="Log In", font=("Times New Roman", 12, "bold"), fg="black", bg="#878378", 
                           command=lambda: handle_login_and_open_homepage(user_name_entry, password_entry))
     login_btn.pack(pady=(0, 5))
     def handle_login_and_open_homepage(user_name_entry, password_entry):  #function to handle login and open homepage
@@ -222,6 +220,14 @@ def open_signup2():
     window2.destroy()
     sign_up()
 
+#to kill message box when users click on the login button
+def login_info():
+    window2.destroy()
+    login()
+def register_info():
+    window1.destroy()
+    sign_up()
+
 
 def home_page():
     global home
@@ -232,7 +238,7 @@ def home_page():
 
     #upper brown box
 
-    upper_frame = tk.Frame(home, width=430, height=80, bg="#878378",relief="ridge", bd=2)
+    upper_frame = tk.Frame(home, width=430, height=10, bg="#878378",relief="ridge", bd=2)
     upper_frame.pack(fill="both",side="top")
 
     #frame for coffee corner logo (top-left corner logo)
@@ -241,7 +247,7 @@ def home_page():
 
     #image for coffee corner logo
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image.png") #image path: cornerlogo
+        image = Image.open(r"D:\\New-CSB-Test\\image\\cornerlogo.png") #image path: cornerlogo
         photo = ImageTk.PhotoImage(image.resize((79, 79)))
 
         label_image = tk.Label(logo_frame_1, image=photo, bg="#878378")
@@ -267,7 +273,7 @@ def home_page():
 
     #image for account (top-right corner)
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com.png") #image path: profilelogo
+        image = Image.open(r"D:\\New-CSB-Test\\image\\profilelogo.png") #image path: profilelogo
         photo = ImageTk.PhotoImage(image.resize((40, 60)))
 
         label_image = tk.Label(logo_frame_2, image=photo, bg="#878378")
@@ -281,7 +287,7 @@ def home_page():
     image_frame = tk.Frame(home, width=300, height=200, bg="white" )
     image_frame.pack(pady=(20, 5))
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/image copy.png")#image path: coffeecorner
+        image = Image.open("D:\\New-CSB-Test\\image\\coffeecorner.png")#image path: coffeecorner
         photo = ImageTk.PhotoImage(image.resize((300, 200)))
 
         label_image = tk.Label(image_frame, image=photo, bg="#878378")
@@ -309,7 +315,7 @@ def home_page():
 
     #cup of coffee image
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com-2.png")#image path:coffeeimage
+        image = Image.open(r"D:\\New-CSB-Test\\image\\coffeeimage.png")#image path:coffeeimage
         photo = ImageTk.PhotoImage(image.resize((60, 60)))
 
         label_image = tk.Label(image1_frame, image=photo, bg="#D9D9D9")
@@ -327,7 +333,7 @@ def home_page():
     image2_frame.pack(side="left", padx=(0, 50))
 
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com-5.png")#image path: thumb
+        image = Image.open(r"D:\\New-CSB-Test\\image\\thumb.png")#image path: thumb
         photo = ImageTk.PhotoImage(image.resize((60, 60)))
 
         label_image = tk.Label(image2_frame, image=photo, bg="#D9D9D9")
@@ -344,7 +350,7 @@ def home_page():
     image3_frame = tk.Frame(small_logo_frame, width=60, height=60, bg="#D9D9D9")
     image3_frame.pack(side="left", padx=(10, 50))
     try:
-        image = Image.open("/Users/kanithasem/python test/.venv/final_project/image/pngwing.com-4.png")#image path: wallet
+        image = Image.open(r"D:\\New-CSB-Test\\image\\wallet.png")#image path: wallet
         photo = ImageTk.PhotoImage(image.resize((60, 60)))
 
         label_image = tk.Label(image3_frame, image=photo, bg="#D9D9D9")
@@ -371,7 +377,12 @@ def home_page():
 
 #open_homepage from sign_up page (when users click on Register)
 def open_homepage1():
-    window1.destroy()
+    global window1
+    try:
+        window1.destroy()
+    except NameError:
+        print("Error: 'window1' is not defined. Ensure 'sign_up' is called before this function.")
+        return
     home_page()
 
 #open_homepage from log in page (when users click on Log In)
@@ -380,8 +391,10 @@ def open_homepage2():
     home_page()
 #open the promotion page when user click on promotion button
 def open_promotion_page():
-    promotion_page = "/Users/kanithasem/python test/.venv/final_project/promotion_page.py" #path to promotion_page.py
+    promotion_page = r"D:\\New-CSB-Test\\promotion_page.py" #path to promotion_page.py
     subprocess.run(["python3", promotion_page])
+
+
 
 
 #Create admin info
@@ -422,7 +435,6 @@ def handle_registration(full_name_entry, user_name_entry, phone_entry, password_
     password_confirm = password_confirm_entry.get() 
  # Call the register_admin function to handle the registration process
     register_admin(full_name, user_name, phone_number, password, password_confirm)
-
 def register_admin(full_name, username, phone_number, password, confirm_password):
     """
     Registers a new admin user in the database.
@@ -440,12 +452,14 @@ def register_admin(full_name, username, phone_number, password, confirm_password
         print("Registration Error: Please fill in all the information.")
         if messagebox:
             messagebox.showerror("Registration Error", "Please fill in all the information.")
+            register_info()
         return False
 
     if password != confirm_password:
         print("Registration Error: Passwords do not match.")
         if messagebox:
             messagebox.showerror("Registration Error", "Passwords do not match.")
+            login_info()
         return False
 
     try:
@@ -460,6 +474,7 @@ def register_admin(full_name, username, phone_number, password, confirm_password
             print("Registration Error: Username already exists.")
             if messagebox:
                 messagebox.showerror("Registration Error", "Username already exists. Please choose a different username.")
+                register_info()
             return False
 
         cursor.execute("""
@@ -475,11 +490,13 @@ def register_admin(full_name, username, phone_number, password, confirm_password
         print("Registration Error: Username already exists.")
         if messagebox:
             messagebox.showerror("Registration Error", "Username already exists. Please choose a different username.")
+            register_info()
         return False
     except sqlite3.Error as e:
         print(f"Error registering admin: {e}")
         if messagebox:
             messagebox.showerror("Database Error", f"Failed to register admin: {e}")
+            register_info()
         return False
     finally:
         if conn:
@@ -531,28 +548,33 @@ def validate_login(username, password):
                 print("Invalid password.")
                 if messagebox:
                     messagebox.showerror("Login Error", "Invalid password.")
+                login_info()
                 return False
         else:
             print("Username not found.")
             if messagebox:
                 messagebox.showerror("Login Error", "Username not found. Please register.")
+                login_info()
             return False
     except sqlite3.Error as e:
         print(f"Database error: {e}")
         if messagebox:
             messagebox.showerror("Database Error", f"Failed to validate login: {e}")
+            login_info()
         return False
     finally:
         if conn:
             conn.close()
+
 
 if __name__ == "__main__":
     create_admin_info_table()
 
 
 
+  
+  
 first_page()
-
 
 
 
