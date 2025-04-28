@@ -6,3 +6,5 @@ Our Project is called "Coffee Corner Waiting Line"
 This project is a python application that is created aims to tackle some issue that cause by the over crowded people who wanted to get the promotion opportunites. 
 This application allows user who are the customer to book the place for a promotion in advance in order to advoid the crowed problem. 
 With this application the owner of the shop will be more convenient in releasing a promotion without facing the same problem. 
+
+**Note: after cloning, you need to change some amount of files and image first before running...
